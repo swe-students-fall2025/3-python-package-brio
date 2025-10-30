@@ -48,19 +48,26 @@ def animate_scroll(
     if not lines:
         yield ""
         return
+    cols_per_frame = max(1, int(cols_per_frame))
     width = len(lines[0])
-    gap = " " * 4  # 头尾间留空隙，视觉更好
-    wrap_lines = [ln + gap + ln for ln in lines]
-    span = len(wrap_lines[0])
-    j = 0
-    total_steps = span * max(1, loops)
-    step = max(1, cols_per_frame)
-    moved = 0
-    while moved < total_steps:
-        frame = "\n".join(wl[j:j+width] for wl in wrap_lines)
-        yield colorize_ascii(frame, color) if color else frame
-        j = (j + step) % span
-        moved += step
+    # 左右各补空白（关键！保证从“全空”进入到“全空”退出）
+    pad = " " * cols_per_frame
+    padded = [pad + ln + pad for ln in lines]   # 宽度 = width + 2*cols
+    total_w = width + 2 * cols_per_frame
+
+    def colorize_if_needed(s: str) -> str:
+        return colorize_ascii(s, color) if color else s
+
+    def one_loop() -> Generator[str, None, None]:
+        # 逐列右移窗口，每次取 cols_per_frame 列
+        for start in range(0, total_w):
+            frame_cols = [row[start:start + cols_per_frame] for row in padded]
+            yield colorize_if_needed("\n".join(frame_cols))
+
+    loops = max(1, int(loops))
+    for _ in range(loops):
+        yield from one_loop()
+    
 
 def animate_wave(
     ascii_art: str,
