@@ -3,7 +3,6 @@ from typing import Generator, Iterable, Optional
 from .colorize_ascii import colorize_ascii, Color
 
 def _normalize(ascii_art: str) -> list[str]:
-    """把 ASCII 画对齐到等宽，便于做列切片/滚动。"""
     lines = ascii_art.splitlines()
     if not lines:
         return []
@@ -13,25 +12,20 @@ def _normalize(ascii_art: str) -> list[str]:
 def animate_typewriter(
     ascii_art: str,
     color: Optional[Color] = None,
-    cps: int = 10,  # characters per second（抽象单位；测试中只影响步长）
+    cps: int = 10,  # characters per second
 ) -> Generator[str, None, None]:
-    """
-    打字机效果：逐列揭示。这里不sleep，测试友好；播放时用 play_animation 控制fps。
-    """
     lines = _normalize(ascii_art)
     if not lines:
         yield ""
         return
     width = len(lines[0])
-    # 约定按 12 fps 映射步长，避免太慢
+    # speed: 12 fps 
     step = max(1, int(round(cps / 12)))
     shown = 0
-    # 逐渐增加可见列
     while shown <= width:
         frame = "\n".join(ln[:shown] for ln in lines)
         yield colorize_ascii(frame, color) if color else frame
         shown += step
-    # 收尾：完整一帧
     full = "\n".join(lines)
     yield colorize_ascii(full, color) if color else full
 
@@ -41,25 +35,20 @@ def animate_scroll(
     cols_per_frame: int = 1,
     loops: int = 1,
 ) -> Generator[str, None, None]:
-    """
-    横向跑马灯：每帧向左滚动若干列，可配置循环次数。
-    """
     lines = _normalize(ascii_art)
     if not lines:
         yield ""
         return
     cols_per_frame = max(1, int(cols_per_frame))
     width = len(lines[0])
-    # 左右各补空白（关键！保证从“全空”进入到“全空”退出）
     pad = " " * cols_per_frame
-    padded = [pad + ln + pad for ln in lines]   # 宽度 = width + 2*cols
+    padded = [pad + ln + pad for ln in lines]   # width = width + 2*cols
     total_w = width + 2 * cols_per_frame
 
     def colorize_if_needed(s: str) -> str:
         return colorize_ascii(s, color) if color else s
 
     def one_loop() -> Generator[str, None, None]:
-        # 逐列右移窗口，每次取 cols_per_frame 列
         for start in range(0, total_w):
             frame_cols = [row[start:start + cols_per_frame] for row in padded]
             yield colorize_if_needed("\n".join(frame_cols))
@@ -76,9 +65,7 @@ def animate_wave(
     period_cols: int = 10,
     frames: int = 24,
 ) -> Generator[str, None, None]:
-    """
-    纵向波浪：按列做正弦偏移，生成固定帧数。
-    """
+  
     import math
     base = _normalize(ascii_art)
     if not base:
@@ -101,9 +88,6 @@ def animate_wave(
         yield colorize_ascii(frame, color) if color else frame
 
 def play_animation(frames: Iterable[str], fps: int = 12) -> None:
-    """
-    在终端播放动画：清屏、回到光标原点、按fps延时打印。
-    """
     import time
     if fps <= 0:
         fps = 12
