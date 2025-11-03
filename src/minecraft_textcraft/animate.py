@@ -19,13 +19,21 @@ def animate_typewriter(
         yield ""
         return
     width = len(lines[0])
-    # speed: 12 fps 
-    step = max(1, int(round(cps / 12)))
+    # Calculate step based on fps (default 12 fps)
+    # Ensure step is at least 1 to avoid skipping
+    fps = 12
+    step = max(1, int(round(cps / fps)))
     shown = 0
-    while shown <= width:
+    # Yield empty frame first for smooth start
+    yield colorize_ascii("", color) if color else ""
+    # Gradually reveal columns
+    while shown < width:
+        shown += step
+        if shown > width:
+            shown = width
         frame = "\n".join(ln[:shown] for ln in lines)
         yield colorize_ascii(frame, color) if color else frame
-        shown += step
+    # Ensure final frame is complete
     full = "\n".join(lines)
     yield colorize_ascii(full, color) if color else full
 
@@ -41,17 +49,37 @@ def animate_scroll(
         return
     cols_per_frame = max(1, int(cols_per_frame))
     width = len(lines[0])
-    pad = " " * cols_per_frame
-    padded = [pad + ln + pad for ln in lines]   # width = width + 2*cols
-    total_w = width + 2 * cols_per_frame
+    # Add padding on the left side so content scrolls in from the right
+    # Content is on the right, window starts at left (showing blank), moves right
+    padding_size = max(width // 2, 20)  # At least 20 columns or 1/2 of width for smooth scroll
+    left_pad = " " * padding_size
+    padded = [left_pad + ln for ln in lines]  # Add padding on the left, content on the right
+    total_w = len(padded[0])  # Total width = padding + width
 
     def colorize_if_needed(s: str) -> str:
         return colorize_ascii(s, color) if color else s
 
     def one_loop() -> Generator[str, None, None]:
-        for start in range(0, total_w):
-            frame_cols = [row[start:start + cols_per_frame] for row in padded]
+        # Scroll from left to right: window starts at left (showing blank), moves right
+        # Content scrolls in from the right side
+        step = max(1, cols_per_frame)
+        
+        # Window starts at leftmost position (start=0, showing only padding/blank)
+        # Window moves right (start increases) until full content is visible
+        min_start = 0  # Leftmost position (showing blank)
+        max_start = total_w - width  # Rightmost position (showing full content)
+        
+        # Generate frames from left to right (start increases)
+        # Content scrolls in from the right
+        for start in range(min_start, max_start + 1, step):
+            # Extract a window of 'width' columns starting from 'start'
+            frame_cols = [row[start:start + width] for row in padded]
             yield colorize_if_needed("\n".join(frame_cols))
+        
+        # Ensure final frame shows the complete content
+        if (max_start - min_start) % step != 0:
+            final_frame = [row[max_start:max_start + width] for row in padded]
+            yield colorize_if_needed("\n".join(final_frame))
 
     loops = max(1, int(loops))
     for _ in range(loops):
@@ -89,10 +117,21 @@ def animate_wave(
 
 def play_animation(frames: Iterable[str], fps: int = 12) -> None:
     import time
+    
     if fps <= 0:
         fps = 12
     delay = 1.0 / fps
+    
+    # Use cursor movement instead of full screen clear for smoother animation
+    def move_cursor_home():
+        """Move cursor to top-left and clear from cursor to end of screen"""
+        print("\033[H\033[J", end="", flush=True)
+    
+    # Clear screen at start
+    move_cursor_home()
+    
     for f in frames:
-        print("\033[2J\033[H", end="")  # clear screen + cursor home
-        print(f)
+        # Move cursor to home position and clear from there
+        move_cursor_home()
+        print(f, end="", flush=True)
         time.sleep(delay)

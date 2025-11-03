@@ -6,7 +6,7 @@ Supports A-Z, 0-9 text and inline commands.
 import re
 from typing import List, Tuple
 from .font_data import get_char, get_char_height, CHAR_HEIGHT, CHAR_WIDTH
-from .commands import getCommandByName, listCommands
+from .commands import get_command, listCommands
 
 
 def _validate_text(text: str) -> bool:
@@ -46,12 +46,10 @@ def _parse_input(input_str: str) -> Tuple[List[str], List[str]]:
         if not part:
             continue
         if part.startswith("\\\\"):
-            # This is a command
-            command_name = part[2:]  # Remove double backslash
+            command_name = part[2:]
             command_parts.append(command_name)
-            text_parts.append(None)  # Placeholder for command position
+            text_parts.append(None)
         else:
-            # This is text
             text_parts.append(part)
             command_parts.append(None)
 
@@ -151,47 +149,32 @@ def renderCommandOnly(command_name: str) -> str:
         Multi-line string representing the rendered command,
         with each row padded to the command's maximum width
     """
-    # Search through all categories to find the command
-    all_commands = listCommands()
+    # Get command art using get_command (searches all categories automatically)
+    command_art = get_command(command_name)
 
-    if command_name not in all_commands:
-        available = ", ".join(all_commands)
-        raise ValueError(
-            f"Command '{command_name}' not found. Available commands: {available}"
-        )
+    # Split command into lines
+    lines = command_art.split("\n")
+    if not lines:
+        return ""
 
-    # Find which category contains this command
-    from .sample_commands import SAMPLE_COMMANDS
+    # Find the maximum width for THIS specific command
+    # Filter out empty/whitespace-only lines to find the actual content width
+    non_empty_lines = [line for line in lines if line.strip()]
 
-    for category, commands in SAMPLE_COMMANDS.items():
-        if command_name in commands:
-            command_art = getCommandByName(category, command_name)
+    # Edge case: if command has no content, return empty
+    if not non_empty_lines:
+        return ""
 
-            # Split command into lines
-            lines = command_art.split("\n")
-            if not lines:
-                return ""
+    max_width = max(len(line) for line in non_empty_lines)
 
-            # Find the maximum width for THIS specific command
-            # Filter out empty/whitespace-only lines to find the actual content width
-            non_empty_lines = [line for line in lines if line.strip()]
+    # Pad each row to this command's maximum width (creates a box for this command)
+    padded_lines = []
+    for line in lines:
+        # Pad each line to the command's natural width
+        padded_line = line.ljust(max_width)
+        padded_lines.append(padded_line)
 
-            # Edge case: if command has no content, return empty
-            if not non_empty_lines:
-                return ""
-
-            max_width = max(len(line) for line in non_empty_lines)
-
-            # Pad each row to this command's maximum width (creates a box for this command)
-            padded_lines = []
-            for line in lines:
-                # Pad each line to the command's natural width
-                padded_line = line.ljust(max_width)
-                padded_lines.append(padded_line)
-
-            return "\n".join(padded_lines)
-
-    raise ValueError(f"Command '{command_name}' not found in any category")
+    return "\n".join(padded_lines)
 
 
 def renderTextAndCommands(text: str) -> str:
