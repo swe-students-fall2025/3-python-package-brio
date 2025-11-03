@@ -678,11 +678,13 @@ FONT_DATA = {
 }
 
 
+# Fixed width for all characters - must match the widest character
+CHAR_WIDTH = 15  # Maximum width found in font data
+
+
 def get_char_width(char: str) -> int:
-    """Get the width of a character in blocks."""
-    if char in FONT_DATA:
-        return len(FONT_DATA[char][0])
-    return 0
+    """Get the width of a character in blocks (fixed width)."""
+    return CHAR_WIDTH
 
 
 def get_char_height() -> int:
@@ -692,19 +694,31 @@ def get_char_height() -> int:
 
 def get_char(char: str) -> list[str]:
     """
-    Get the font data for a character.
+    Get the font data for a character, padded to fixed width.
+
+    Each character is padded to CHAR_WIDTH (15) to ensure proper alignment
+    when combining characters horizontally.
 
     Args:
         char: Single character (A-Z, 0-9, or space)
 
     Returns:
-        List of strings representing the character rows
+        List of strings representing the character rows, each padded to CHAR_WIDTH
 
     Raises:
         KeyError: If character is not in the font data
     """
-    if char.upper() in FONT_DATA:
-        return FONT_DATA[char.upper()]
-    raise KeyError(
-        f"Character '{char}' is not supported. Only A-Z, 0-9, and space are allowed."
-    )
+    if char.upper() not in FONT_DATA:
+        raise KeyError(
+            f"Character '{char}' is not supported. Only A-Z, 0-9, and space are allowed."
+        )
+
+    char_rows = FONT_DATA[char.upper()]
+    # Pad each row to fixed width (CHAR_WIDTH) to ensure alignment
+    padded_rows = []
+    for row in char_rows:
+        # Pad each row to exactly CHAR_WIDTH characters
+        padded_row = row.ljust(CHAR_WIDTH)
+        padded_rows.append(padded_row)
+
+    return padded_rows
