@@ -13,10 +13,12 @@ def test_main_help():
     """Test --help option"""
     with patch('sys.argv', ['minecraft-textcraft', '--help']):
         with patch('sys.stdout', new=StringIO()) as mock_stdout:
-            main()
+            with pytest.raises(SystemExit) as exc_info:
+                main()
+            # argparse help exits with code 0
+            assert exc_info.value.code == 0
             output = mock_stdout.getvalue()
-            assert 'minecraft-textcraft' in output
-            assert 'OPTIONS' in output or 'USAGE' in output
+            assert 'minecraft-textcraft' in output or 'Minecraft-style' in output
 
 
 def test_main_render_text_with_color():

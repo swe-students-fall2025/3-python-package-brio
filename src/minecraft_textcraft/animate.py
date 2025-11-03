@@ -51,7 +51,8 @@ def animate_scroll(
     width = len(lines[0])
     # Add padding on the left side so content scrolls in from the right
     # Content is on the right, window starts at left (showing blank), moves right
-    padding_size = max(width // 2, 20)  # At least 20 columns or 1/2 of width for smooth scroll
+    # Padding should be proportional to content width, but not too small
+    padding_size = max(width, 10)  # At least same as width or 10 columns for smooth scroll
     left_pad = " " * padding_size
     padded = [left_pad + ln for ln in lines]  # Add padding on the left, content on the right
     total_w = len(padded[0])  # Total width = padding + width
