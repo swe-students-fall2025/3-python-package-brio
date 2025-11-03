@@ -1,3 +1,4 @@
+[![CI](https://github.com/swe-students-fall2025/3-python-package-brio/actions/workflows/ci.yml/badge.svg)](https://github.com/swe-students-fall2025/3-python-package-brio/actions/workflows/ci.yml)
 # minecraft-textcraft
 
 A Python package that converts text into blocky Minecraft-style ASCII art, with support for special inline commands like \sword, \heart, and \diamond. Commands are center-aligned with text for a professional, visually appealing output.
