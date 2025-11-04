@@ -48,7 +48,7 @@ You can also combine them all or a few of them and mix and match!
 
 ```bash
 #Text + Command + Animation + Color + Custom FPS
-python -m minecraft_textcraft 'GET \\sword NOW' --effect wave --color GREEN --fps 20
+minecraft-textcraft 'GET \\sword NOW' --effect wave --color GREEN --fps 20
 ```
 
 ## Example Output
