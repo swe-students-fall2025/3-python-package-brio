@@ -36,7 +36,7 @@ def main():
     """Main entry point for the command-line interface"""
     parser = argparse.ArgumentParser(
         description="Minecraft-style ASCII art text renderer. See DEMO_COMMANDS.md for examples.",
-        formatter_class=argparse.RawDescriptionHelpFormatter
+        formatter_class=lambda prog: argparse.HelpFormatter(prog, max_help_position=35, width=100)
     )
     
     # Main arguments
