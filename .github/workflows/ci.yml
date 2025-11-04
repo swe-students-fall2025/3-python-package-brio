@@ -1,8 +1,6 @@
 name: CI
 
 on:
-  push:
-    branches: [pipfile-experiment]
   pull_request:
     branches: [pipfile-experiment]
 
