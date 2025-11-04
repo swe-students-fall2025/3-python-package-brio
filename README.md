@@ -6,7 +6,7 @@ The output can be colorized, animated, and is center-aligned to create fun, prof
 
 # Installation
 ```bash
-pip install minecraft-textcraft
+pip install minecraft-textcraft==0.0.3
 ```
 
 # Usage
