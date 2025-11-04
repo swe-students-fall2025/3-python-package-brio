@@ -1,31 +1,72 @@
 [![CI](https://github.com/swe-students-fall2025/3-python-package-brio/actions/workflows/ci.yml/badge.svg)](https://github.com/swe-students-fall2025/3-python-package-brio/actions/workflows/ci.yml)
 # minecraft-textcraft
 
-A Python package that converts text into blocky Minecraft-style ASCII art, with support for special inline commands like \sword, \heart, and \diamond. Commands are center-aligned with text for a professional, visually appealing output.
+minecraft-textcraft is a Python pacakge that transforms text into blocky, Minecraft-style ASCII art. It supports special inline item commands like \sword, \shield, and \earth to embed themed icons directly within text.
+The output can be colorized, animated, and is center-aligned to create fun, professional-looking console visual effects.
 
-# Quickstart
-
-To setup:
+# Installation
 ```bash
-git clone git@github.com:swe-students-fall2025/3-python-package-brio.git
-cd 3-python-package-brio
-pipenv shell
-pipenv install -e ".[dev]"
+pip install minecraft-textcraft
 ```
 
-To build:
-```bash
-pipenv run python -m build
-```
-Artifacts will be in `dist/`.
+# Usage
 
-To run:
+minecraft-textcraft supports A-Z, numbers, item commands, adjustable colors and animations.
+
+Rendered output can be:
+- **Colors**: `RED`, `GREEN`, `BLUE`, `YELLOW`
+- **Animated**: `type`, `scroll`, `wave`
+- **FPS**: `10-30` (default: 12)
+- Mixed with **both text + Minecraft items**
+
+---
+
+To view available commands:
 ```bash
-pipenv run minecraft-textcraft
+minecraft-textcraft --help
 ```
 
-To run tests:
+## Example Usage
 ```bash
-pipenv run pytest
+#Basic Text Rendering
+minecraft-textcraft "Hello"
+
+#Basic Art Rendering
+minecraft-textcraft --get sword
+
+#Text + Command
+minecraft-textcraft "Hello \\earth"
+
+#With Color
+minecraft-textcraft "Hello" --color GREEN
+
+#With Animation
+minecraft-textcraft "Hello" --effect type
+```
+
+You can also combine them all or a few of them and mix and match!
+
+```bash
+#Text + Command + Animation + Color + Custom FPS
+python -m minecraft_textcraft 'GET \\sword NOW' --effect wave --color GREEN --fps 20
+```
+
+## Example Output
+```bash
+minecraft-textcraft 'Hello'
+ ██        ██         ████████████         ██                   ██                      ███████    
+ ██        ██         ██                   ██                   ██                    ██       ██  
+ ██        ██         ██                   ██                   ██                   ██         ██ 
+ ██        ██         ██                   ██                   ██                   ██         ██ 
+ ██        ██         ██                   ██                   ██                   ██         ██ 
+ ██        ██         ██                   ██                   ██                   ██         ██ 
+ ████████████         ████████             ██                   ██                   ██         ██ 
+ ██        ██         ██                   ██                   ██                   ██         ██ 
+ ██        ██         ██                   ██                   ██                   ██         ██ 
+ ██        ██         ██                   ██                   ██                   ██         ██ 
+ ██        ██         ██                   ██                   ██                   ██         ██ 
+ ██        ██         ██                   ██                   ██                   ██         ██ 
+ ██        ██         ██                   ██                   ██                    ██       ██  
+ ██        ██         ████████████         ████████████         ████████████            ███████    
 ```
 

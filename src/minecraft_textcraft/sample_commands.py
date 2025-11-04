@@ -63,7 +63,7 @@ SAMPLE_COMMANDS = {
               *
 """
     },
-    "treasure": { "diamond": """
+    "treasure": { "diamond": r"""
               .     '     ,
                 _________
              _ /_|_____|_\ _
@@ -72,7 +72,7 @@ SAMPLE_COMMANDS = {
                    '.'
         """
     },
-    "defense": { "shield": """
+    "defense": { "shield": r"""
             \_              _/
             ] --__________-- [
             |       ||       |
