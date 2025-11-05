@@ -1,12 +1,13 @@
 [![CI](https://github.com/swe-students-fall2025/3-python-package-brio/actions/workflows/ci.yml/badge.svg)](https://github.com/swe-students-fall2025/3-python-package-brio/actions/workflows/ci.yml)
+[![CD](https://github.com/swe-students-fall2025/3-python-package-brio/actions/workflows/ci.yml/badge.svg)](https://github.com/swe-students-fall2025/3-python-package-brio/actions/workflows/cd.yml)
 # minecraft-textcraft
 
-minecraft-textcraft is a Python pacakge that transforms text into blocky, Minecraft-style ASCII art. It supports special inline item commands like \sword, \shield, and \earth to embed themed icons directly within text.
+minecraft-textcraft is a Python package that transforms text into blocky, Minecraft-style ASCII art. It supports special inline item commands like \sword, \shield, and \earth to embed themed icons directly within text.
 The output can be colorized, animated, and is center-aligned to create fun, professional-looking console visual effects.
 
 # Installation
 ```bash
-pip install minecraft-textcraft==0.0.3
+pip install minecraft-textcraft
 ```
 
 # Usage
