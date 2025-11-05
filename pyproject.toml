@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "minecraft-textcraft"
-version = "0.0.3"
+version = "0.1.0"
 description = "A Python package that converts text into blocky Minecraft-style ASCII art..."
 readme = "README.md"
 license = "GPL-3.0-or-later"
