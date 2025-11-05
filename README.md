@@ -1,5 +1,5 @@
 [![CI](https://github.com/swe-students-fall2025/3-python-package-brio/actions/workflows/ci.yml/badge.svg)](https://github.com/swe-students-fall2025/3-python-package-brio/actions/workflows/ci.yml)
-[![CD](https://github.com/swe-students-fall2025/3-python-package-brio/actions/workflows/cd.yml/badge.svg)](https://github.com/swe-students-fall2025/3-python-package-brio/actions/workflows/cd.yml)
+[![CD](https://github.com/swe-students-fall2025/3-python-package-brio/actions/workflows/deploy.yml/badge.svg)](https://github.com/swe-students-fall2025/3-python-package-brio/actions/workflows/deploy.yml)
 # minecraft-textcraft
 
 minecraft-textcraft is a Python package that transforms text into blocky, Minecraft-style ASCII art. It supports special inline item commands like \sword, \shield, and \earth to embed themed icons directly within text.
