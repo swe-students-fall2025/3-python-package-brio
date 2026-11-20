@@ -7,7 +7,15 @@
 
 Textcraft turns plain text into Minecraft-inspired terminal graphics. Users can insert item art such as a sword or shield, choose a color, and play typewriter, scrolling or wave effects from one command.
 
-![Wave animation generated with Textcraft's rendering and animation functions](docs/media/textcraft-wave.gif)
+## Animated walkthrough
+
+One input, three effects: typewriter → scrolling text → wave animation.
+
+![Textcraft typewriter, scroll and wave](docs/media/textcraft-workflow.gif)
+
+Every animation frame comes from the package’s actual rendering and animation functions, exported to GIF with Pillow. This is program output, not a mock terminal effect.
+
+[Recreate the animation](docs/DEMO.md). Playback timing is edited for readability.
 
 ## Engineering highlights
 
@@ -70,6 +78,6 @@ CLI input -> argument parsing -> text/item lookup -> block-art rendering
 
 For interview discussion, start with how the CLI composes these modules, how terminal rendering is tested without an interactive terminal, and how package releases are separated from development.
 
-The GIF renders actual frames from the package's wave-animation function into an image for GitHub; it is a visual export of program output.
+The GIF exports actual typewriter, scroll and wave frames from this source checkout. The generation script is included for reproducibility.
 
 [Course instructions](instructions.md) · [License](LICENSE)
